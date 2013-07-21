@@ -49,14 +49,14 @@ end
 template "/etc/td-agent/td-agent.conf" do
   mode "0644"
   source "td-agent.conf.erb"
+  notifies :restart, 'service[td-agent]'
 end
 
 package "td-agent" do
   options "-f --force-yes"
-  action :upgrade
+  action :install
 end
 
 service "td-agent" do
-  action [ :enable, :start ]
-  subscribes :restart, resources(:template => "/etc/td-agent/td-agent.conf")
+  action [ :enable, :start ]  
 end
